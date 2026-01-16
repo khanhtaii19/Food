@@ -1,21 +1,58 @@
-import Food from "../models/Food.js";
+import foodModel from '../models/foodModel.js';
+import fs from 'fs';
 
-// Lấy danh sách món ăn
-export const getFoods = async (req, res) => {
+// Add food item
+const addFood = async (req, res) => {
+  let image_filename = `${req.file.filename}`;
+  
+  const food = new foodModel({
+    name: req.body.name,
+    description: req.body.description,
+    price: req.body.price,
+    category: req.body.category,
+    image: image_filename
+  });
+  
   try {
-    const foods = await Food.find();
-    res.json(foods);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
+    await food.save();
+    res.json({ success: true, message: 'Food Added' });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error' });
   }
 };
 
-// Thêm món ăn
-export const createFood = async (req, res) => {
+// List all food
+const listFood = async (req, res) => {
   try {
-    const food = await Food.create(req.body);
-    res.status(201).json(food);
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
+    const foods = await foodModel.find({});
+    res.json({ success: true, data: foods });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: 'Error' });
   }
 };
+
+// Remove food item
+const removeFood = async (req, res) => {
+  try {
+    const food = await foodModel.findById(req.body.id);
+    if (!food) {
+      return res.status(404).json({ success: false, message: 'Food not found' });
+    }
+
+    if (food.image) {
+      fs.unlink(`uploads/${food.image}`, (err) => {
+        if (err) console.log('unlink error:', err.message);
+      });
+    }
+
+    await foodModel.findByIdAndDelete(req.body.id);
+    res.json({ success: true, message: 'Food Removed' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+export { addFood, listFood, removeFood };

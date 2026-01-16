@@ -135,6 +135,52 @@
         padding: 8px 25px;
     }
 }
+.navbar-profile {
+    position: relative;
+    cursor: pointer;
+}
+
+.navbar-profile img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.nav-profile-dropdown {
+    position: absolute;
+    display: none;
+    right: 0;
+    top: 60px;
+    z-index: 2001; /* ensure dropdown is above navbar and overlays */
+    background: white;
+    padding: 12px 16px;
+    border-radius: 4px;
+    border: 1px solid tomato;
+    outline: 2px solid white;
+    list-style: none;
+}
+
+.navbar-profile:hover .nav-profile-dropdown {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-profile-dropdown li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.nav-profile-dropdown li:hover {
+    color: tomato;
+}
+
+.nav-profile-dropdown img {
+    width: 20px;
+    height: 20px;
+}
 @media (max-width: 900px) {
     .navbar .logo{
         width: 40px;

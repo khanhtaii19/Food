@@ -1,14 +1,16 @@
 .login-popup{
-    position: absolute;
-    z-index: 1;
+    position: fixed; /* ensure overlay sits above fixed navbar */
+    top: 0;
+    left: 0;
+    z-index: 2000; /* larger than navbar z-index (1000) */
     width: 100%;
     height: 100%;
-    background-color: #00000090;
+    background-color: rgba(0,0,0,0.55);
     display: grid;
 }
 .login-popup-container{
     place-self: center;
-    width: max(23vw, 330px);
+    width: min(90%, 420px); /* responsive, not too large */
     color: #808080;
     display: flex;
     flex-direction: column;
